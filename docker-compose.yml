@@ -1,0 +1,40 @@
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootlocal
+      MYSQL_DATABASE: bdd
+      MYSQL_USER: cda
+      MYSQL_PASSWORD: cda
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: rootlocal
+    ports:
+      - "8080:80"
+
+  backend:
+    build: ./back
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back:/back
+    depends_on:
+      - db
+
+
+#Se placer a la racine de l'application
+#docker compose build
+#docker compose up -d
+#PHPMYADMIN -> localhost:8080/ 
+#user -> cda | mdp -> cda
