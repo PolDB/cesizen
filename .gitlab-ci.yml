@@ -1,0 +1,87 @@
+stages:
+  - test-python
+  - test-playwright
+
+# ─── Variables globales ────────────────────────────────────────
+variables:
+  MYSQL_ROOT_PASSWORD: root
+  MYSQL_DATABASE: bdd
+  MYSQL_USER: cda
+  MYSQL_PASSWORD: cda
+
+# ─── Job 1 : Tests Python (unitaires + régression) ────────────
+tests-python:
+  stage: test-python
+  image: python:3.11
+  services:
+    - name: mysql:8.0
+      alias: db
+      variables:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: bdd
+        MYSQL_USER: cda
+        MYSQL_PASSWORD: cda
+  before_script:
+    - cd back
+    - pip install -r requirements.txt
+  script:
+    - echo "=== Tests unitaires ==="
+    - python -m pytest tests/ -v --tb=short --junitxml=report-unit.xml
+    - echo "=== Tests de régression ==="
+    - python -m pytest tests/test_regression.py -v --tb=short --junitxml=report-regression.xml
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - back/report-unit.xml
+        - back/report-regression.xml
+    expire_in: 7 days
+  # Envoi des résultats vers Qase
+  after_script:
+    - |
+      if [ -n "$QASE_API_TOKEN" ]; then
+        pip install qase-pytest
+        cd back
+        python -m pytest tests/ --qase-mode=testops \
+          --qase-testops-api-token=$QASE_API_TOKEN \
+          --qase-testops-project=$QASE_PROJECT_CODE \
+          --qase-testops-run-title="Pipeline #$CI_PIPELINE_ID - Tests unitaires" \
+          -v || true
+      fi
+
+# ─── Job 2 : Tests Playwright (E2E) ───────────────────────────
+tests-playwright:
+  stage: test-playwright
+  image: mcr.microsoft.com/playwright:v1.40.0-jammy
+  needs: [tests-python]
+  before_script:
+    - apt-get update && apt-get install -y docker-compose
+    - docker compose up -d
+    - sleep 20
+    - cd front
+    - npm install
+    - npx playwright install --with-deps chromium
+  script:
+    - echo "=== Démarrage Expo ==="
+    - npx expo start --web &
+    - npx wait-on http://localhost:8081 --timeout 60000
+    - echo "=== Tests Playwright ==="
+    - npx playwright test --reporter=html,junit
+  after_script:
+    - |
+      if [ -n "$QASE_API_TOKEN" ]; then
+        cd front
+        npx playwright test \
+          --reporter=@qase/playwright-reporter \
+          -- \
+          --qase-api-token=$QASE_API_TOKEN \
+          --qase-project=$QASE_PROJECT_CODE \
+          --qase-run-title="Pipeline #$CI_PIPELINE_ID - Tests E2E Playwright" || true
+      fi
+  artifacts:
+    when: always
+    paths:
+      - front/playwright-report/
+    reports:
+      junit: front/test-results/junit.xml
+    expire_in: 7 days
