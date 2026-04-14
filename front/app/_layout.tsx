@@ -8,18 +8,20 @@ function RouteGuard({ children }: { children: React.ReactNode }) {
   const segments = useSegments();
   const router = useRouter();
 
-  useEffect(() => {
-    if (loading) return; // Attendre que AsyncStorage soit lu
-
-    const routesProtegees = ['home', 'profil', 'respiration'];
+   useEffect(() => {
+    if (loading) return;
+    const routesProtegees = ['profil', 'parametres'];
+    const routesAdmin = ['admin'];
     const routeActuelle = segments[0];
-    const estProtegee = routesProtegees.includes(routeActuelle);
-
-    if (!user && estProtegee) {
-      router.replace('/');
+ 
+    if (!user && routesProtegees.includes(routeActuelle)) {
+      router.replace('/login' as any);
+    }
+    if ((!user || user.state !== 'admin') && routesAdmin.includes(routeActuelle)) {
+      router.replace('/home' as any);
     }
   }, [user, segments, loading]);
-
+ 
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent' }}>
@@ -27,7 +29,7 @@ function RouteGuard({ children }: { children: React.ReactNode }) {
       </View>
     );
   }
-
+ 
   return <>{children}</>;
 }
 
@@ -37,10 +39,13 @@ export default function RootLayout() {
       <RouteGuard>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="index" />
+          <Stack.Screen name="login" />
           <Stack.Screen name="register" />
           <Stack.Screen name="home" />
           <Stack.Screen name="profil" />
+          <Stack.Screen name="parametres" />
           <Stack.Screen name="respiration" />
+          <Stack.Screen name="admin" />
         </Stack>
       </RouteGuard>
     </AuthProvider>

@@ -24,6 +24,11 @@ class LoginSchema(BaseModel):
     email: str
     password: str
 
+class ChangePasswordSchema(BaseModel):
+    email: str
+    ancien_password: str
+    nouveau_password: str
+
 
 @router.post("/register")
 def register(data: RegisterSchema):
@@ -43,3 +48,13 @@ def login(data: LoginSchema):
         return result
     except ValueError as e:
         raise HTTPException(status_code=401, detail=str(e))
+
+@router.post("/change-password")
+def change_password(data: ChangePasswordSchema):
+    service = AuthService(DB_CONFIG)
+    try:
+        service.change_password(data.email, data.ancien_password, data.nouveau_password)
+        return {"message": "Mot de passe modifié avec succès."}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+ 

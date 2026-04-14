@@ -51,4 +51,14 @@ class AuthService:
             "email": user["email"],
             "name": user["Name"],
             "surname": user["Surname"],
+            "state": user["state"],
         }
+
+    def change_password(self, email: str, ancien_password: str, nouveau_password: str):
+        user = self.repository.get_account_by_email(email)
+        if not user:
+            raise ValueError("Utilisateur introuvable.")
+        if not self.verify_password(ancien_password, user["Password"]):
+            raise ValueError("Ancien mot de passe incorrect.")
+        nouveau_hash = self.hash_password(nouveau_password)
+        self.repository.update_password(user["id_user"], nouveau_hash)

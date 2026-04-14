@@ -22,6 +22,14 @@ class AccountRepository:
         account = cursor.fetchone()
         conn.close()
         return account
+    
+    def update_role(self, account_id, state):
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE Users SET state = %s WHERE id_user = %s", (state, account_id))
+        conn.commit()
+        conn.close()
+ 
 
     def get_account_by_email(self, email):
         conn = self._get_connection()
@@ -49,6 +57,16 @@ class AccountRepository:
         cursor.execute(
             "UPDATE Users SET Name = %s, Surname = %s, email = %s WHERE id_user = %s",
             (name, surname, email, account_id)
+        )
+        conn.commit()
+        conn.close()
+
+    def update_password(self, account_id, hashed_password):
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE Users SET Password = %s WHERE id_user = %s",
+            (hashed_password, account_id)
         )
         conn.commit()
         conn.close()
