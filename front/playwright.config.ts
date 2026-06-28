@@ -7,14 +7,6 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
 reporter: [
   ['html'],
-  ['playwright-qase-reporter', {
-    testops: {
-      api: { token: process.env.QASE_TOKEN },
-      project: process.env.QASE_PROJECT,
-      run: { complete: true },
-      uploadAttachments: true,
-    },
-  }],
 ],
 use: {
   baseURL: 'http://localhost:8081',
