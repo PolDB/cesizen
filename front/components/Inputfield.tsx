@@ -1,55 +1,28 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TextInputProps } from 'react-native';
+import { COLORS } from '../constants/colors';
 
-type Props = {
-  label: string;
-  value: string;
-  onChangeText: (text: string) => void;
-  placeholder?: string;
-  secureTextEntry?: boolean;
-  keyboardType?: 'default' | 'email-address' | 'numeric';
-};
+interface Props extends TextInputProps { label: string; }
 
-export default function InputField({
-  label,
-  value,
-  onChangeText,
-  placeholder = '',
-  secureTextEntry = false,
-  keyboardType = 'default',
-}: Props) {
+export default function InputField({ label, ...props }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <TextInput
-        style={styles.input}
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        secureTextEntry={secureTextEntry}
-        keyboardType={keyboardType}
-        autoCapitalize="none"
-      />
+      <TextInput 
+        style={styles.input} 
+        placeholderTextColor={COLORS.texteMuted}
+        accessibilityLabel={label} 
+        placeholder={label}
+        {...props} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 16,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 6,
-  },
+  container: { gap: 6 },
+  label: { fontSize: 13, fontWeight: '500', color: COLORS.titreDark },
   input: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
+    backgroundColor: COLORS.fondPage, borderWidth: 1.5, borderColor: COLORS.violetBorder,
+    borderRadius: 12, padding: 12, fontSize: 15, color: COLORS.titreDark,
   },
 });

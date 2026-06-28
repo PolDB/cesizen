@@ -100,6 +100,7 @@ class TestLogin:
             "Password": hashed,
             "Name": "Jean",
             "Surname": "Dupont",
+            "state":1
         }
 
         result = svc.login("jean@test.com", "mdp123")
@@ -124,6 +125,7 @@ class TestLogin:
             "Password": hashed,
             "Name": "Jean",
             "Surname": "Dupont",
+            "state": 1
         }
 
         with pytest.raises(ValueError, match="incorrect"):

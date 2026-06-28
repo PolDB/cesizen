@@ -1,0 +1,14 @@
+name: ✨ Évolution
+description: Proposer une nouvelle fonctionnalité
+labels: ["évolution"]
+body:
+  - type: textarea
+    id: besoin
+    attributes:
+      label: Besoin et justification
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact estimé

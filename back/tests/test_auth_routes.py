@@ -10,7 +10,7 @@ client = TestClient(app)
 
 class TestRegisterRoute:
     def test_register_succes(self):
-        with patch("app.routes.auth.AuthService") as MockService:
+        with patch("app.controllers.auth.AuthService") as MockService:
             mock_svc = MagicMock()
             MockService.return_value = mock_svc
             mock_svc.register.return_value = {
@@ -30,7 +30,7 @@ class TestRegisterRoute:
             assert "token" in response.json()
 
     def test_register_email_existant(self):
-        with patch("app.routes.auth.AuthService") as MockService:
+        with patch("app.controllers.auth.AuthService") as MockService:
             mock_svc = MagicMock()
             MockService.return_value = mock_svc
             mock_svc.register.side_effect = ValueError("Un compte avec cet email existe déjà.")
@@ -56,7 +56,7 @@ class TestRegisterRoute:
 
 class TestLoginRoute:
     def test_login_succes(self):
-        with patch("app.routes.auth.AuthService") as MockService:
+        with patch("app.controllers.auth.AuthService") as MockService:
             mock_svc = MagicMock()
             MockService.return_value = mock_svc
             mock_svc.login.return_value = {
@@ -77,7 +77,7 @@ class TestLoginRoute:
             assert response.json()["name"] == "Jean"
 
     def test_login_identifiants_invalides(self):
-        with patch("app.routes.auth.AuthService") as MockService:
+        with patch("app.controllers.auth.AuthService") as MockService:
             mock_svc = MagicMock()
             MockService.return_value = mock_svc
             mock_svc.login.side_effect = ValueError("Email ou mot de passe incorrect.")

@@ -6,6 +6,7 @@ type User = {
   email: string;
   name: string;
   surname: string;
+  state?: string;
 };
 
 type AuthContextType = {
@@ -16,17 +17,13 @@ type AuthContextType = {
 };
 
 const AuthContext = createContext<AuthContextType>({
-  user: null,
-  loading: true,
-  setUser: () => {},
-  logout: () => {},
+  user: null, loading: true, setUser: () => {}, logout: () => {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUserState] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Au démarrage, on relit l'utilisateur sauvegardé
   useEffect(() => {
     const chargerUser = async () => {
       try {
@@ -43,11 +40,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const setUser = async (user: User | null) => {
     setUserState(user);
-    if (user) {
-      await AsyncStorage.setItem('user', JSON.stringify(user));
-    } else {
-      await AsyncStorage.removeItem('user');
-    }
+    if (user) await AsyncStorage.setItem('user', JSON.stringify(user));
+    else await AsyncStorage.removeItem('user');
   };
 
   const logout = async () => {

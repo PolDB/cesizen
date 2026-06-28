@@ -1,0 +1,15 @@
+export const COLORS = {
+  violet: '#8B7EC8',
+  violetLight: '#A99DD6',
+  violetBg: '#F4F2FB',
+  violetCard: '#EEEAF9',
+  violetBorder: '#E0DDF5',
+  saumon: '#E8A87C',
+  saumonBg: '#FDF6F2',
+  saumonBorder: '#F5DECE',
+  saumonDark: '#C4906A',
+  titreDark: '#3D3566',
+  texteMuted: '#B8B0D8',
+  blanc: '#FFFFFF',
+  fondPage: '#F8F7FD',
+};

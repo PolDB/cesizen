@@ -13,5 +13,10 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
+  ],
+  "exclude": [
+    "cypress",
+    "cypress.config.js",
+    "node_modules"
   ]
 }
