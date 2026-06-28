@@ -11,7 +11,9 @@ export default function InputField({ label, ...props }: Props) {
       <TextInput 
         style={styles.input} 
         placeholderTextColor={COLORS.texteMuted}
-        accessibilityLabel={label} {...props} />
+        accessibilityLabel={label} 
+        placeholder={label}
+        {...props} />
     </View>
   );
 }

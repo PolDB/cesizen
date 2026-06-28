@@ -37,8 +37,8 @@ export default function LoginScreen() {
         <Text style={styles.sousTitre}>Content de te revoir</Text>
       </View>
       <View style={styles.form}>
-        <InputField label="Email" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
-        <InputField label="Mot de passe" value={password} onChangeText={setPassword} secureTextEntry />
+        <InputField label="Email" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" placeholder='Email' />
+        <InputField label="Mot de passe" value={password} onChangeText={setPassword} secureTextEntry  placeholder='Mot de passe' />
         <TouchableOpacity style={styles.btnPrimary} onPress={handleLogin} accessibilityLabel="Se connecter" accessibilityRole="button">
           <Text style={styles.btnPrimaryTexte}>Se connecter</Text>
         </TouchableOpacity>

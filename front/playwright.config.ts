@@ -19,11 +19,18 @@ reporter: [
 use: {
   baseURL: 'http://localhost:8081',
   trace: 'on-first-retry',
+  video: 'on',
+
 },
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+         ...devices['Desktop Chrome'],
+        launchOptions: {
+          slowMo: 500,
+        },
+       },
     },
   ],
 });

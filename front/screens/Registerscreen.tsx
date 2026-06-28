@@ -21,7 +21,7 @@ export default function RegisterScreen() {
 
   const handleConsentement = async (accepte: boolean) => {
     setModalVisible(false);
-    if (!accepte) { Alert.alert('Inscription annulee', 'Le consentement est requis.'); return; }
+    if (!accepte) { setModalVisible(false); return; }
     try {
       const response = await fetch(`${API_URL}/auth/register`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -29,7 +29,7 @@ export default function RegisterScreen() {
       });
       const data = await response.json();
       if (!response.ok) { Alert.alert('Erreur', data.detail || 'Une erreur est survenue.'); return; }
-      Alert.alert('Succes', 'Compte cree ! Vous pouvez vous connecter.', [{ text: 'OK', onPress: () => router.replace('/login' as any) }]);
+      router.replace('/login' as any);
     } catch { Alert.alert('Erreur', 'Impossible de contacter le serveur.'); }
   };
 
@@ -47,10 +47,10 @@ export default function RegisterScreen() {
         <Text style={styles.sousTitre}>Rejoins la communaute CesiZen</Text>
       </View>
       <View style={styles.form}>
-        <InputField label="Prenom" value={name} onChangeText={setName} />
-        <InputField label="Nom" value={surname} onChangeText={setSurname} />
-        <InputField label="Email" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
-        <InputField label="Mot de passe" value={password} onChangeText={setPassword} secureTextEntry />
+        <InputField label="Prenom" value={name} onChangeText={setName} placeholder='Prenom' />
+        <InputField label="Nom de famille" value={surname} onChangeText={setSurname} placeholder='Nom de famille' />
+        <InputField label="Email" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" placeholder='Email' />
+        <InputField label="Mot de passe" value={password} onChangeText={setPassword} secureTextEntry placeholder='Mot de passe' />
         <TouchableOpacity style={styles.btnPrimary} onPress={handleSubmit} accessibilityLabel="Creer mon compte" accessibilityRole="button">
           <Text style={styles.btnPrimaryTexte}>Creer mon compte</Text>
         </TouchableOpacity>

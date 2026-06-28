@@ -3,9 +3,9 @@ import { test, expect } from '@playwright/test';
 // Helper : connecter l'utilisateur
 async function login(page: any) {
   await page.goto('/login');
-  await page.getByPlaceholder('exemple@mail.com').fill('jean@test.com');
-  await page.getByPlaceholder('Mot de passe').fill('motdepasse123');
-  await page.getByText('Connexion').last().click();
+  await page.getByPlaceholder('Email').fill('lucas@gmail.com');
+  await page.getByPlaceholder('Mot de passe').fill('123');
+  await page.getByText('Se connecter').last().click();
   await expect(page).toHaveURL(/home/);
 }
 
