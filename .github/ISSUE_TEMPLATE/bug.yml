@@ -1,0 +1,22 @@
+name: 🐛 Anomalie
+description: Signaler un bug ou un dysfonctionnement
+labels: ["bug"]
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Étapes de reproduction
+    validations:
+      required: true
+  - type: textarea
+    id: attendu
+    attributes:
+      label: Comportement attendu
+  - type: textarea
+    id: observe
+    attributes:
+      label: Comportement observé
+  - type: input
+    id: environnement
+    attributes:
+      label: Environnement (OS, version Expo, etc.)
