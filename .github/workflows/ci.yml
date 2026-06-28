@@ -117,10 +117,21 @@ jobs:
         working-directory: front
         run: npx playwright install --with-deps chromium
 
+      - name: Installation de serve
+        run: npm install -g serve
+
+      - name: Build Expo web
+        working-directory: front
+        run: npx expo export --platform web
+
+      - name: Démarrage de l'app Expo web
+        working-directory: front
+        run: |
+          serve dist --listen 8081 &
+          sleep 10
+
       - name: Lancement des tests Playwright
         working-directory: front
-        env:
-          BASE_URL: http://localhost:8000
         run: npx playwright test --reporter=list
 
       - name: Upload du rapport Playwright (en cas d'échec)
